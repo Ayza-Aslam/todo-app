@@ -8,51 +8,55 @@ app.use(cors());
 app.use(express.json());
 
 /* =========================
-DEBUG: ENV CHECK
+   DEBUG LOGS
 ========================= */
+console.log("Server starting...");
+console.log("PORT:", process.env.PORT);
 console.log("DATABASE_URL:", process.env.DATABASE_URL ? "FOUND" : "MISSING");
 
 /* =========================
-DATABASE CONNECTION
+   DATABASE CONNECTION (SAFE)
 ========================= */
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: process.env.DATABASE_URL
+    ? { rejectUnauthorized: false }
+    : false
 });
 
 /* =========================
-SAFE DB CONNECTION CHECK
+   SAFE TABLE INIT (NO CRASH)
 ========================= */
-/*pool.connect()
-  .then(client => {
-    console.log("DB Connected 🚀");
-
-    return client.query(`
+const initDB = async () => {
+  try {
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS todos (
         id SERIAL PRIMARY KEY,
         text VARCHAR(255) NOT NULL,
         done BOOLEAN DEFAULT FALSE
       )
-    `).then(() => client.release());
-  })
-  .catch(err => console.log("DB Error:", err.message));
-*/
+    `);
+    console.log("Table ready 🚀");
+  } catch (err) {
+    console.log("DB Init Error:", err.message);
+  }
+};
+
+initDB();
+
 /* =========================
-TEST ROUTE
+   ROUTES
 ========================= */
+
+// Health check route
 app.get('/', (req, res) => {
   res.send("Todo API is running 🚀");
 });
 
+// Test route
 app.get('/test', (req, res) => {
   res.json({ message: "Backend working fine 🚀" });
 });
-
-/* =========================
-ROUTES
-========================= */
 
 // Get all todos
 app.get('/todos', async (req, res) => {
@@ -114,7 +118,7 @@ app.delete('/todos/:id', async (req, res) => {
 });
 
 /* =========================
-START SERVER (RAILWAY SAFE)
+   START SERVER (RAILWAY SAFE)
 ========================= */
 const PORT = process.env.PORT || 3004;
 
