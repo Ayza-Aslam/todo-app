@@ -25,7 +25,7 @@ const pool = new Pool({
 /* =========================
 SAFE DB CONNECTION CHECK
 ========================= */
-pool.connect()
+/*pool.connect()
   .then(client => {
     console.log("DB Connected 🚀");
 
@@ -38,7 +38,7 @@ pool.connect()
     `).then(() => client.release());
   })
   .catch(err => console.log("DB Error:", err.message));
-
+*/
 /* =========================
 TEST ROUTE
 ========================= */
