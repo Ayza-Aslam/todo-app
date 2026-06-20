@@ -10,6 +10,14 @@ async function initDatabase() {
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
+
+  // Migrate tables created by the old schema (without timestamp columns)
+  await pool.query(`
+    ALTER TABLE todos ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW()
+  `);
+  await pool.query(`
+    ALTER TABLE todos ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()
+  `);
 }
 
 module.exports = { initDatabase };
