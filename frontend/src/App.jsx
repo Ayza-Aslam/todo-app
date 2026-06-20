@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
-const API = 'http://localhost:3004'
+//const API = 'http://localhost:3004'
+const API = 'https://todo-app-production-5017.up.railway.app'
 
 function App() {
 const [todos, setTodos] = useState([])
