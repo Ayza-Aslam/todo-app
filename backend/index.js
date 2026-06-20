@@ -69,6 +69,6 @@ console.log(err.message);
 res.status(500).json({ error: err.message });
 }
 });
-app.listen(3004, () => {
+app.listen(process.env.PORT || 3004, () => {
 console.log('Server running!');
 });
