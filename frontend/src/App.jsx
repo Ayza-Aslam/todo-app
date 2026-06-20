@@ -7,11 +7,29 @@ function App() {
 const [todos, setTodos] = useState([])
 const [text, setText] = useState('')
 
+
 useEffect(() => {
+  console.log(" GET TODOS API CALL HO RAHI HAI");
+
+  fetch(`${API}/todos`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("DATA MILA:", data);
+      setTodos(data);
+    })
+    .catch(err => {
+      console.log(" ERROR AAYA:", err);
+    });
+}, []);
+
+
+
+/*useEffect(() => {
 fetch(`${API}/todos`)
 .then(res => res.json())
 .then(data => setTodos(data))
-}, [])
+
+}, [])*/
 
 const addTodo = () => {
 if (!text.trim()) return
