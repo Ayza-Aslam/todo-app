@@ -5,7 +5,8 @@ const pool = new Pool(
   env.databaseUrl
     ? {
         connectionString: env.databaseUrl,
-        ssl: env.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
+        // Railway Postgres requires SSL even when NODE_ENV is unset
+        ssl: { rejectUnauthorized: false },
       }
     : env.pg
 );

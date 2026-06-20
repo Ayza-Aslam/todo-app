@@ -7,11 +7,11 @@ async function startServer() {
     await initDatabase();
     console.log('Database ready');
 
-    app.listen(env.port, () => {
+    app.listen(env.port, '0.0.0.0', () => {
       console.log(`Server running on port ${env.port} (${env.nodeEnv})`);
     });
   } catch (err) {
-    console.error('Failed to start server:', err.message);
+    console.error('Failed to start server:', err.message || err);
     process.exit(1);
   }
 }
