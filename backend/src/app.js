@@ -9,7 +9,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: env.corsOrigins,
+    origin(origin, callback) {
+      if (env.isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS blocked for origin: ${origin}`));
+      }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   })
 );

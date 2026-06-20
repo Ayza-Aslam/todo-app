@@ -14,6 +14,19 @@ const env = {
   clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
 };
 
-env.corsOrigins = env.clientUrl.split(',').map((origin) => origin.trim());
+env.corsOrigins = env.clientUrl.split(',').map((origin) => origin.trim()).filter(Boolean);
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+
+  if (env.corsOrigins.includes(origin)) return true;
+
+  // Allow Vercel production + preview deployments
+  if (/^https:\/\/[\w-]+\.vercel\.app$/.test(origin)) return true;
+
+  return env.nodeEnv !== 'production' && origin.startsWith('http://localhost');
+}
+
+env.isAllowedOrigin = isAllowedOrigin;
 
 module.exports = env;
