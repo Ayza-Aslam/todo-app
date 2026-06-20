@@ -2,15 +2,13 @@ const pool = require('../config/database');
 const AppError = require('../utils/AppError');
 
 async function getAllTodos() {
-  const result = await pool.query(
-    'SELECT id, text, done, created_at, updated_at FROM todos ORDER BY id ASC'
-  );
+  const result = await pool.query('SELECT id, text, done FROM todos ORDER BY id ASC');
   return result.rows;
 }
 
 async function createTodo(text) {
   const result = await pool.query(
-    'INSERT INTO todos (text, done) VALUES ($1, $2) RETURNING id, text, done, created_at, updated_at',
+    'INSERT INTO todos (text, done) VALUES ($1, $2) RETURNING id, text, done',
     [text.trim(), false]
   );
   return result.rows[0];
@@ -18,10 +16,7 @@ async function createTodo(text) {
 
 async function toggleTodo(id) {
   const result = await pool.query(
-    `UPDATE todos
-     SET done = NOT done, updated_at = NOW()
-     WHERE id = $1
-     RETURNING id, text, done, created_at, updated_at`,
+    'UPDATE todos SET done = NOT done WHERE id = $1 RETURNING id, text, done',
     [id]
   );
 
