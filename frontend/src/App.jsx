@@ -1,35 +1,18 @@
 import { useState, useEffect } from 'react'
 
-//const API = 'http://localhost:3004'
-const API = 'https://todo-app-production-5017.up.railway.app'
+const API = 'http://localhost:3004'
+//const API = 'https://todo-app-production-5017.up.railway.app'
 
 function App() {
 const [todos, setTodos] = useState([])
 const [text, setText] = useState('')
 
-
 useEffect(() => {
-  console.log(" GET TODOS API CALL HO RAHI HAI");
-
-  fetch(`${API}/todos`)
-    .then(res => res.json())
-    .then(data => {
-      console.log("DATA MILA:", data);
-      setTodos(data);
-    })
-    .catch(err => {
-      console.log(" ERROR AAYA:", err);
-    });
-}, []);
-
-
-
-/*useEffect(() => {
 fetch(`${API}/todos`)
 .then(res => res.json())
 .then(data => setTodos(data))
 
-}, [])*/
+}, [])
 
 const addTodo = () => {
 if (!text.trim()) return
